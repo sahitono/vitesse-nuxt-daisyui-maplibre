@@ -5,5 +5,8 @@ export default antfu(
     stylistic: {
       quotes: "double",
     },
+    ignores: [
+      "commitlint.config.js",
+    ],
   },
 )
