@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {Map as MglMap} from "maplibre-gl"
 import {onMapLoad} from "~/composables/maplibre-helper/onMapLoad";
+import {IndonesiaExtent} from "~/constants/map";
 const online = useOnline()
 
 const mapId = "map"
@@ -9,8 +10,8 @@ onMounted(async () => {
     container: mapId,
     style: {
       version: 8,
-      center: [117.2, -3.2],
-      zoom: 4,
+      center: IndonesiaExtent.center,
+      zoom: IndonesiaExtent.zoom,
       layers: [],
       sources: {},
       glyphs: "https://fontstack-pbf.supermap.id/{fontstack}/{range}.pbf"
