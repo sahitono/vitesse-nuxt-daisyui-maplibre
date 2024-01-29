@@ -1,3 +1,7 @@
+@import url("@fontsource-variable/dm-sans/index.css");
+@import url("@fontsource-variable/roboto-mono/index.css");
+@import url("./nprogress.css");
+
 html {
     font-family: "DM Sans Variable", sans-serif;
 }

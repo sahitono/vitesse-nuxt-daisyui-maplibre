@@ -4,7 +4,7 @@ import { appDescription } from "./constants/index"
 export default defineNuxtConfig({
   modules: [
     "@vueuse/nuxt",
-    "@unocss/nuxt",
+    "@nuxtjs/tailwindcss",
     "@pinia/nuxt",
     "@nuxtjs/color-mode",
     "@vite-pwa/nuxt",
@@ -14,16 +14,12 @@ export default defineNuxtConfig({
     // when using generate, payload js assets included in sw precache manifest
     // but missing on offline, disabling extraction it until fixed
     payloadExtraction: false,
-    inlineSSRStyles: false,
     renderJsonPayloads: true,
-    typedPages: true,
+    typedPages: true
   },
 
   css: [
-    "@unocss/reset/tailwind.css",
-    "~/assets/styles/main.css",
-    "@fontsource-variable/dm-sans/index.css",
-    "@fontsource-variable/roboto-mono/index.css"
+    "~/assets/styles/main.css"
   ],
 
   colorMode: {
@@ -44,6 +40,11 @@ export default defineNuxtConfig({
       routes: ["/"],
       ignore: ["/", "/hi"],
     },
+  },
+
+  typescript: {
+    typeCheck: true,
+    strict: true
   },
 
   app: {

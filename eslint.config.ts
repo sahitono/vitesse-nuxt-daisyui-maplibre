@@ -8,5 +8,7 @@ export default antfu(
     ignores: [
       "commitlint.config.js",
     ],
-  },
+    unocss: false,
+    formatters: true
+  }
 )
