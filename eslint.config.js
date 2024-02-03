@@ -9,6 +9,11 @@ export default antfu(
       "commitlint.config.js",
     ],
     unocss: false,
-    formatters: true
-  }
+    formatters: true,
+    rules: {
+      "style/arrow-parens": ["error", "always"],
+      "curly": ["error", "all"],
+      "antfu/top-level-function": ["off"],
+    },
+  },
 )

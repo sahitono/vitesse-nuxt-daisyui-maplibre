@@ -7,7 +7,6 @@ useHead({
 </script>
 
 <template>
-  <VitePwaManifest />
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
@@ -16,10 +15,12 @@ useHead({
 <style>
 @import url("@fontsource-variable/dm-sans");
 
-html, body , #__nuxt{
+html,
+body,
+#__nuxt {
   height: 100vh;
   margin: 0;
   padding: 0;
-  font-family: 'DM Sans Variable', 'sans serif';
+  font-family: "DM Sans Variable", "sans serif";
 }
 </style>
