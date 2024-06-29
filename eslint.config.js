@@ -1,19 +1,32 @@
+// @ts-check
+import { FlatCompat } from "@eslint/eslintrc"
 import antfu from "@antfu/eslint-config"
+import nuxt from "./.nuxt/eslint.config.mjs"
 
-export default antfu(
-  {
-    stylistic: {
-      quotes: "double",
+const compat = new FlatCompat()
+
+export default nuxt(
+  antfu(
+    {
+      stylistic: {
+        quotes: "double",
+      },
+      ignores: [
+        "commitlint.config.js",
+      ],
+      unocss: false,
+      formatters: true,
+      rules: {
+        "style/arrow-parens": ["error", "always"],
+        "curly": ["error", "all"],
+        "antfu/top-level-function": ["off"],
+      },
     },
-    ignores: [
-      "commitlint.config.js",
-    ],
-    unocss: false,
-    formatters: true,
+  ),
+  ...compat.config({
+    extends: ["plugin:tailwindcss/recommended"],
     rules: {
-      "style/arrow-parens": ["error", "always"],
-      "curly": ["error", "all"],
-      "antfu/top-level-function": ["off"],
+      "tailwindcss/no-custom-classname": "off",
     },
-  },
+  }),
 )

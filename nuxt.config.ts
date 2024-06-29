@@ -10,8 +10,11 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@sidebase/nuxt-auth",
     "@nuxtjs/tailwindcss",
+    "nuxt-headlessui",
     "@pinia/nuxt",
     "@nuxtjs/color-mode",
+    "@nuxt/image",
+    "@nuxt/eslint",
   ],
   plugins: [
     "~/plugins/forbidden-handler",
