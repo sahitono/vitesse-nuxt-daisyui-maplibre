@@ -8,9 +8,9 @@ export interface AccessTokenPayload {
   isAdmin: Maybe<boolean>
 }
 
-export const generateAccessToken = (user: AccessTokenPayload, jti?: string) => {
+export const createAccessToken = (user: AccessTokenPayload, expiresIn: number, jti?: string) => {
   return jwt.sign(user, useRuntimeConfig().secret, {
-    expiresIn: 60 * 5,
+    expiresIn,
     jwtid: jti ?? uuid.v4(),
   })
 }

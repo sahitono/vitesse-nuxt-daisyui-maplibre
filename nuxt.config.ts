@@ -97,11 +97,17 @@ export default defineNuxtConfig({
       type: "refresh",
       endpoints: {
         getSession: { path: "/currentUser" },
-        refresh: { path: "/refresh", method: "post" },
-        signIn: { path: "/signin", method: "post" },
+        refresh: {
+          path: "/refresh",
+          method: "post",
+        },
+        signIn: {
+          path: "/signin",
+          method: "post",
+        },
       },
       pages: {
-        login: "/",
+        login: "/protected",
       },
       token: {
         maxAgeInSeconds: 60 * 5,
@@ -111,7 +117,6 @@ export default defineNuxtConfig({
       refreshToken: {
         signInResponseRefreshTokenPointer: "/token/refreshToken",
         maxAgeInSeconds: 24 * 60 * 60,
-
       },
       sessionDataType: {
         username: "string",
@@ -128,5 +133,11 @@ export default defineNuxtConfig({
 
   devtools: {
     enabled: true,
+  },
+
+  eslint: {
+    config: {
+      standalone: false,
+    },
   },
 })

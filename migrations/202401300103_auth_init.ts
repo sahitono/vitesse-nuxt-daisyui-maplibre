@@ -1,7 +1,7 @@
 import { type Kysely, sql } from "kysely"
 
 export async function up(db: Kysely<any>): Promise<void> {
-  await fsql`PRAGMA journal_mode=WAL`.execute(db)
+  await sql`PRAGMA journal_mode=WAL`.execute(db)
 
   await db.schema.createTable("roles").ifNotExists().addColumn("id", "integer", (col) => col.primaryKey().autoIncrement())
     .addColumn("name", "text", (col) => col.unique().notNull())
@@ -27,7 +27,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("expired_at", "integer", (col) => col.notNull())
     .execute()
 
-  await db.schema.createIndex("idx_refres_token__all")
+  await db.schema.createIndex("idx_refresh_token__all")
     .on("refresh_tokens")
     .columns(["jti", "expired_at"])
     .execute()

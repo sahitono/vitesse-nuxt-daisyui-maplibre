@@ -4,10 +4,12 @@ import { verify } from "argon2"
 import { decode } from "jsonwebtoken"
 import { parseOrThrow } from "~/server/utils/validation"
 import { badRequest } from "~/server/infrastructure/errors"
-import { generateAccessToken } from "~/server/service/generateToken"
+import { createAccessToken } from "~/server/service/createAccessToken"
 import { findUserByUsername } from "~/server/service/users"
 import { createRefreshToken } from "~/server/service/refreshTokens"
 import type { JwtContent } from "~/server/model/JwtContent"
+import { getRefreshTokenMaxAge } from "~/server/infrastructure/config/getRefreshTokenMaxAge"
+import { getAccessTokenMaxAge } from "~/server/infrastructure/config/getAccessTokenMaxAge"
 
 const SignInPayload = z.object({
   username: z.string().min(4),
@@ -38,16 +40,15 @@ export default defineEventHandler(async (event) => {
   }
 
   const jti = uuid.v4()
-  const accessToken = generateAccessToken(user, jti)
+  const accessToken = createAccessToken(user, getAccessTokenMaxAge(), jti)
 
   const { exp } = decode(accessToken) as JwtContent
-
-  const refreshToken = await createRefreshToken(jti, exp!)
+  const refreshToken = await createRefreshToken(jti, exp!, getRefreshTokenMaxAge())
 
   return {
     token: {
       accessToken,
-      refreshToken,
+      refreshToken: refreshToken.token,
     },
   }
 })

@@ -3,7 +3,9 @@ import { v4 } from "uuid"
 import { db } from "~/server/infrastructure/database"
 import { badGateway } from "~/server/infrastructure/errors"
 
-export const createRefreshToken = async (jti: string, exp: number) => {
+const REFRESH_TOKEN_EXPIRED = 60 * 60 * 24
+
+export const createRefreshToken = async (jti: string, accessTokenExpired: number, refreshTokenExpired: number = REFRESH_TOKEN_EXPIRED) => {
   const token = v4()
   const result = await db.transaction().execute(async (trx) => {
     await trx.deleteFrom("refresh_tokens").where("jti", "=", jti).execute()
@@ -12,14 +14,14 @@ export const createRefreshToken = async (jti: string, exp: number) => {
     return await trx.insertInto("refresh_tokens").values({
       jti,
       token: hashed,
-      exp: exp!,
-      expiredAt: (Date.now() / 1000) + 60 * 60 * 24,
-    }).returning("id").execute()
+      exp: accessTokenExpired!,
+      expiredAt: (Date.now() / 1000) + refreshTokenExpired,
+    }).returningAll().execute()
   })
 
   if (result.length === 0) {
     badGateway()
   }
 
-  return token
+  return result[0]
 }

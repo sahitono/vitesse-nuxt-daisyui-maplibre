@@ -2,6 +2,9 @@ export enum ErrorMessage {
   PROXY_NAME_EXIST = "proxy name already exist",
   INVALID_SECRET_KEY = "invalid secret key",
   MISSING_SECRET_KEY = "missing secret key",
+  INVALID_REFRESH_TOKEN = "INVALID_REFRESH_TOKEN",
+  INVALID_ACCESS_TOKEN = "INVALID_ACCESS_TOKEN",
+  EXPIRED_ACCESS_TOKEN = "EXPIRED_ACCESS_TOKEN",
 }
 
 export const badRequest = (message: string = "Bad Request") => {
@@ -39,10 +42,6 @@ export const unauthorized = (message: string = "Unauthorized") => {
   })
 }
 
-export enum ErrorMessage {
-  INVALID_REFRESH_TOKEN = "INVALID_REFRESH_TOKEN",
-  INVALID_ACCESS_TOKEN = "INVALID_ACCESS_TOKEN",
-}
 export const forbidden = (message: string = "Forbidden") => {
   throw createError({
     statusCode: 403,
