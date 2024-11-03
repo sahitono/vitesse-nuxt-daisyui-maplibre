@@ -1,15 +1,15 @@
-import "dotenv/config"
-import * as path from "node:path"
 import { promises as fs } from "node:fs"
-import { fileURLToPath } from "node:url"
+import * as path from "node:path"
 import { dirname } from "node:path"
-import { Kysely, type Migration, type MigrationProvider, Migrator, SqliteDialect } from "kysely"
-import { get } from "radash"
-
-import consola from "consola"
+import { fileURLToPath } from "node:url"
 import Database from "better-sqlite3"
+import consola from "consola"
+import { Kysely, type Migration, type MigrationProvider, Migrator, SqliteDialect } from "kysely"
 
 import { run } from "kysely-migration-cli"
+import { get } from "radash"
+
+import "dotenv/config"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)

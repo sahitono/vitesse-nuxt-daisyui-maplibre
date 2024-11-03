@@ -1,11 +1,6 @@
 import { appDescription } from "./constants"
 
 export default defineNuxtConfig({
-  ssr: false,
-  runtimeConfig: {
-    databaseUrl: "",
-    secret: "",
-  },
   modules: [
     "@vueuse/nuxt",
     "@sidebase/nuxt-auth",
@@ -16,48 +11,15 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxt/eslint",
   ],
+
   plugins: [
     "~/plugins/forbidden-handler",
   ],
-  experimental: {
-    // when using generate, payload js assets included in sw precache manifest
-    // but missing on offline, disabling extraction it until fixed
-    payloadExtraction: false,
-    renderJsonPayloads: true,
-    typedPages: true,
-  },
 
-  css: [
-    "~/assets/styles/main.css",
-  ],
+  ssr: false,
 
-  colorMode: {
-    preference: "forest",
-    fallback: "forest",
-    dataValue: "theme",
-    classSuffix: "",
-  },
-
-  // future: {
-  //   compatibilityVersion: 4,
-  // },
-
-  nitro: {
-    esbuild: {
-      options: {
-        target: "esnext",
-      },
-    },
-    prerender: {
-      crawlLinks: false,
-      routes: ["/"],
-      ignore: ["/", "/hi"],
-    },
-  },
-
-  typescript: {
-    typeCheck: true,
-    strict: true,
+  devtools: {
+    enabled: true,
   },
 
   app: {
@@ -94,6 +56,52 @@ export default defineNuxtConfig({
         },
       ],
     },
+  },
+
+  css: [
+    "~/assets/styles/main.css",
+  ],
+
+  colorMode: {
+    preference: "forest",
+    fallback: "forest",
+    dataValue: "theme",
+    classSuffix: "",
+  },
+
+  runtimeConfig: {
+    databaseUrl: "",
+    secret: "",
+  },
+
+  future: {
+    compatibilityVersion: 4,
+  },
+
+  experimental: {
+    // when using generate, payload js assets included in sw precache manifest
+    // but missing on offline, disabling extraction it until fixed
+    payloadExtraction: false,
+    renderJsonPayloads: true,
+    typedPages: true,
+  },
+
+  nitro: {
+    esbuild: {
+      options: {
+        target: "esnext",
+      },
+    },
+    prerender: {
+      crawlLinks: false,
+      routes: ["/"],
+      ignore: ["/", "/hi"],
+    },
+  },
+
+  typescript: {
+    typeCheck: true,
+    strict: true,
   },
 
   auth: {
@@ -139,13 +147,14 @@ export default defineNuxtConfig({
     },
   },
 
-  devtools: {
-    enabled: true,
-  },
-
   eslint: {
     config: {
       standalone: false,
+      nuxt: {
+        sortConfigKeys: true,
+      },
     },
   },
+
+  compatibilityDate: "2024-11-04",
 })
