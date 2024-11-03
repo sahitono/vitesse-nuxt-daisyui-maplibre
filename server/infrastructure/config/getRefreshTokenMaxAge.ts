@@ -3,8 +3,8 @@ import { badGateway } from "~/server/infrastructure/errors"
 
 export const getRefreshTokenMaxAge = () => {
   const age = match(useRuntimeConfig().public.auth.provider)
-    .with(({ type: "refresh" }), (p) => {
-      return p.refreshToken.maxAgeInSeconds
+    .with(({ type: "local" }), (p) => {
+      return p.refresh?.token?.maxAgeInSeconds
     })
     .otherwise(() => undefined)
 

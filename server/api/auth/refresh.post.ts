@@ -1,16 +1,16 @@
-import z from "zod"
-import { verify } from "argon2"
 import type { JwtPayload } from "jsonwebtoken"
+import { verify } from "argon2"
 import { decode } from "jsonwebtoken"
-import { parseOrThrow } from "~/server/utils/validation"
+import z from "zod"
+import { getAccessTokenMaxAge } from "~/server/infrastructure/config/getAccessTokenMaxAge"
+import { getRefreshTokenMaxAge } from "~/server/infrastructure/config/getRefreshTokenMaxAge"
 import { db } from "~/server/infrastructure/database"
 import { ErrorMessage, unauthorized } from "~/server/infrastructure/errors"
 import { createAccessToken } from "~/server/service/createAccessToken"
-import { findUserByUsername } from "~/server/service/users"
-import { createRefreshToken } from "~/server/service/refreshTokens"
 import { getSessionOrThrow } from "~/server/service/getSessionOrThrow"
-import { getRefreshTokenMaxAge } from "~/server/infrastructure/config/getRefreshTokenMaxAge"
-import { getAccessTokenMaxAge } from "~/server/infrastructure/config/getAccessTokenMaxAge"
+import { createRefreshToken } from "~/server/service/refreshTokens"
+import { findUserByUsername } from "~/server/service/users"
+import { parseOrThrow } from "~/server/utils/validation"
 
 const RefreshPayload = z.object({
   refreshToken: z.string(),
@@ -27,7 +27,8 @@ export default defineEventHandler(async (event) => {
   parseOrThrow(RefreshPayload, payload)
 
   const refreshToken = await db
-    .selectFrom("refresh_tokens").selectAll()
+    .selectFrom("refresh_tokens")
+    .selectAll()
     .where("jti", "=", jti!)
     .execute()
 

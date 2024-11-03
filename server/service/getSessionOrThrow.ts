@@ -1,6 +1,6 @@
-import { tryit } from "radash"
 import type { EventHandlerRequest, H3Event } from "h3"
 import jwt from "jsonwebtoken"
+import { tryit } from "radash"
 import { ErrorMessage, unauthorized } from "~/server/infrastructure/errors"
 import type { JwtContent } from "~/server/model/JwtContent"
 import { isExpired } from "~/server/utils/isExpired"

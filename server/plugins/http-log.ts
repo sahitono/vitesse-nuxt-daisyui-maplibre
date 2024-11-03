@@ -1,5 +1,5 @@
-import { get } from "radash"
 import consola from "consola"
+import { get } from "radash"
 
 export default defineNitroPlugin((nitro) => {
   nitro.hooks.hook("request", (event) => {

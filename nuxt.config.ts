@@ -38,6 +38,10 @@ export default defineNuxtConfig({
     classSuffix: "",
   },
 
+  // future: {
+  //   compatibilityVersion: 4,
+  // },
+
   nitro: {
     esbuild: {
       options: {
@@ -94,13 +98,9 @@ export default defineNuxtConfig({
 
   auth: {
     provider: {
-      type: "refresh",
+      type: "local",
       endpoints: {
         getSession: { path: "/currentUser" },
-        refresh: {
-          path: "/refresh",
-          method: "post",
-        },
         signIn: {
           path: "/signin",
           method: "post",
@@ -109,19 +109,27 @@ export default defineNuxtConfig({
       pages: {
         login: "/protected",
       },
+      refresh: {
+        isEnabled: true,
+        endpoint: {
+          path: "/refresh",
+          method: "post",
+        },
+        signInResponseRefreshTokenPointer: "/token/refreshToken",
+        refreshRequestTokenPointer: "/token/refreshToken",
+        maxAgeInSeconds: 24 * 60 * 60,
+      },
       token: {
         maxAgeInSeconds: 60 * 5,
         sameSiteAttribute: "lax",
         signInResponseTokenPointer: "/token/accessToken",
       },
-      refreshToken: {
-        signInResponseRefreshTokenPointer: "/token/refreshToken",
-        maxAgeInSeconds: 24 * 60 * 60,
-      },
-      sessionDataType: {
-        username: "string",
-        roleName: "string",
-        isAdmin: "boolean",
+      session: {
+        dataType: {
+          username: "string",
+          roleName: "string",
+          isAdmin: "boolean",
+        },
       },
     },
     globalAppMiddleware: true,
