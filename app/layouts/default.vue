@@ -1,5 +1,5 @@
 <template>
-  <main class="w-full h-full">
+  <main class="size-full ">
     <slot />
   </main>
 </template>

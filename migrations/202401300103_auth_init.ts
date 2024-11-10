@@ -3,7 +3,9 @@ import { type Kysely, sql } from "kysely"
 export async function up(db: Kysely<any>): Promise<void> {
   await sql`PRAGMA journal_mode=WAL`.execute(db)
 
-  await db.schema.createTable("roles").ifNotExists().addColumn("id", "integer", (col) => col.primaryKey().autoIncrement())
+  await db.schema.createTable("roles")
+    .ifNotExists()
+    .addColumn("id", "integer", (col) => col.primaryKey().autoIncrement())
     .addColumn("name", "text", (col) => col.unique().notNull())
     .addColumn("is_admin", "boolean", (col) => col.notNull().defaultTo(false))
     .addColumn("created_at", "timestamp", (col) => col.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))

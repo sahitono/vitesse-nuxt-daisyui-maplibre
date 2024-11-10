@@ -7,6 +7,6 @@ export default defineNuxtPlugin({
       return err
     },
   },
-  setup(n) {
+  setup() {
   },
 })

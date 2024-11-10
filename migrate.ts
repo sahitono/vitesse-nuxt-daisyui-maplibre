@@ -1,6 +1,7 @@
 import { promises as fs } from "node:fs"
 import * as path from "node:path"
 import { dirname } from "node:path"
+import { env } from "node:process"
 import { fileURLToPath } from "node:url"
 import Database from "better-sqlite3"
 import consola from "consola"
@@ -23,7 +24,6 @@ class ESMFileMigrationProvider implements MigrationProvider {
 
   async getMigrations(): Promise<Record<string, Migration>> {
     const migrations: Record<string, Migration> = {}
-    // const __dirname = url.fileURLToPath(new URL(".", import.meta.url))
     const resolvedPath = path.resolve(__dirname, this.relativePath)
     const files = await fs.readdir(resolvedPath)
 
@@ -44,10 +44,9 @@ class ESMFileMigrationProvider implements MigrationProvider {
 // For ESM environment
 const migrationFolder = new URL("./migrations", import.meta.url).pathname
 
-const db = new Kysely<typeof Database>({
+const db = new Kysely<any>({
   dialect: new SqliteDialect({
-    // eslint-disable-next-line node/prefer-global/process
-    database: new Database(get(process.env, "NUXT_DATABASE_URL", "")),
+    database: new Database(get(env, "NUXT_DATABASE_URL", "")),
   }),
 })
 
@@ -55,5 +54,5 @@ const migrator = new Migrator({
   db,
   provider: new ESMFileMigrationProvider("./migrations"),
 })
-
+// @ts-expect-error bypass in using esm
 run(db, migrator, migrationFolder)

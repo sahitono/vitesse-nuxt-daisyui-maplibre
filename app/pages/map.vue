@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { IndonesiaExtent } from "~~/constants/map"
 import { Map as MglMap } from "maplibre-gl"
 import { onMapLoad } from "~/composables/maplibre-helper/onMapLoad"
-import { IndonesiaExtent } from "~/constants/map"
 
 definePageMeta({
   middleware: "auth",
@@ -40,13 +40,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="map-container relative w-full h-full">
-    <div class="tools absolute z-100 w-full">
-      <div class="navbar bg-base-100 w-full">
+  <div class="map-container relative size-full">
+    <div class="tools z-100 absolute w-full">
+      <div class="navbar w-full bg-base-100">
         test
       </div>
     </div>
-    <div id="map" class="map w-full h-full" />
+    <div id="map" class="map size-full" />
   </div>
 </template>
 

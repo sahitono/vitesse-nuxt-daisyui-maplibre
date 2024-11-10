@@ -1,4 +1,4 @@
-import type { MapLibreEvent, Map as Mapl } from "maplibre-gl"
+import type { Map as Mapl, MapLibreEvent } from "maplibre-gl"
 
 /**
  * Await map load with promise
