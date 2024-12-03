@@ -1,6 +1,6 @@
+import type { Maybe } from "~~/types/utility"
 import jwt from "jsonwebtoken"
 import * as uuid from "uuid"
-import type { Maybe } from "~/types/utility"
 
 export interface AccessTokenPayload {
   username: string

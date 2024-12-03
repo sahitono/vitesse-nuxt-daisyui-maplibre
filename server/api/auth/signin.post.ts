@@ -1,15 +1,15 @@
+import type { JwtContent } from "~~/server/model/JwtContent"
 import { verify } from "argon2"
 import { decode } from "jsonwebtoken"
-import * as uuid from "uuid"
+import { uuidv7 } from "uuidv7"
 import z from "zod"
-import { getAccessTokenMaxAge } from "~/server/infrastructure/config/getAccessTokenMaxAge"
-import { getRefreshTokenMaxAge } from "~/server/infrastructure/config/getRefreshTokenMaxAge"
-import { badRequest } from "~/server/infrastructure/errors"
-import type { JwtContent } from "~/server/model/JwtContent"
-import { createAccessToken } from "~/server/service/createAccessToken"
-import { createRefreshToken } from "~/server/service/refreshTokens"
-import { findUserByUsername } from "~/server/service/users"
-import { parseOrThrow } from "~/server/utils/validation"
+import { getAccessTokenMaxAge } from "~~/server/infrastructure/config/getAccessTokenMaxAge"
+import { getRefreshTokenMaxAge } from "~~/server/infrastructure/config/getRefreshTokenMaxAge"
+import { badRequest } from "~~/server/infrastructure/errors"
+import { createAccessToken } from "~~/server/service/createAccessToken"
+import { createRefreshToken } from "~~/server/service/refreshTokens"
+import { findUserByUsername } from "~~/server/service/users"
+import { parseOrThrow } from "~~/server/utils/validation"
 
 const SignInPayload = z.object({
   username: z.string().min(4),
@@ -23,23 +23,23 @@ export default defineEventHandler(async (event) => {
   }>(event)
   parseOrThrow(SignInPayload, payload)
 
-  const users = await findUserByUsername(payload.username)
-  if (users.length !== 1) {
+  const rows = await findUserByUsername(payload.username)
+  if (rows == null) {
     badRequest("user not exist")
   }
 
-  const passwordSame: boolean = await verify(users[0].password, payload.password)
+  const passwordSame: boolean = await verify(rows!.user_account.password, payload.password)
   if (!passwordSame) {
     badRequest("invalid password")
   }
 
   const user = {
-    username: users[0].username,
-    roleName: users[0].name,
-    isAdmin: users[0].isAdmin === 1,
+    username: rows!.user_account.username,
+    roleName: rows!.role?.name,
+    isAdmin: rows!.role?.name === "admin",
   }
 
-  const jti = uuid.v4()
+  const jti = uuidv7()
   const accessToken = createAccessToken(user, getAccessTokenMaxAge(), jti)
 
   const { exp } = decode(accessToken) as JwtContent

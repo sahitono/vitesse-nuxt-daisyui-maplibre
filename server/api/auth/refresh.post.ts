@@ -2,15 +2,15 @@ import type { JwtPayload } from "jsonwebtoken"
 import { verify } from "argon2"
 import { decode } from "jsonwebtoken"
 import z from "zod"
-import { getAccessTokenMaxAge } from "~/server/infrastructure/config/getAccessTokenMaxAge"
-import { getRefreshTokenMaxAge } from "~/server/infrastructure/config/getRefreshTokenMaxAge"
-import { db } from "~/server/infrastructure/database"
-import { ErrorMessage, unauthorized } from "~/server/infrastructure/errors"
-import { createAccessToken } from "~/server/service/createAccessToken"
-import { getSessionOrThrow } from "~/server/service/getSessionOrThrow"
-import { createRefreshToken } from "~/server/service/refreshTokens"
-import { findUserByUsername } from "~/server/service/users"
-import { parseOrThrow } from "~/server/utils/validation"
+import { getAccessTokenMaxAge } from "~~/server/infrastructure/config/getAccessTokenMaxAge"
+import { getRefreshTokenMaxAge } from "~~/server/infrastructure/config/getRefreshTokenMaxAge"
+import { useDb } from "~~/server/infrastructure/db"
+import { badRequest, ErrorMessage, unauthorized } from "~~/server/infrastructure/errors"
+import { createAccessToken } from "~~/server/service/createAccessToken"
+import { getSessionOrThrow } from "~~/server/service/getSessionOrThrow"
+import { createRefreshToken } from "~~/server/service/refreshTokens"
+import { findUserByUsername } from "~~/server/service/users"
+import { parseOrThrow } from "~~/server/utils/validation"
 
 const RefreshPayload = z.object({
   refreshToken: z.string(),
@@ -26,28 +26,28 @@ export default defineEventHandler(async (event) => {
   }>(event)
   parseOrThrow(RefreshPayload, payload)
 
-  const refreshToken = await db
-    .selectFrom("refresh_tokens")
-    .selectAll()
-    .where("jti", "=", jti!)
-    .execute()
+  const refreshToken = await useDb().query.refreshTokens.findFirst({ where: (rt, { eq }) => eq(rt.jti, jti) }).execute()
 
-  if (refreshToken.length === 0) {
+  if (refreshToken == null) {
     unauthorized(ErrorMessage.INVALID_REFRESH_TOKEN)
   }
 
-  const tokenSame = await verify(refreshToken[0].token, payload.refreshToken)
-  const tokenExpired = refreshToken[0].expiredAt < (Date.now() / 1000)
+  const tokenSame = await verify(refreshToken!.token, payload.refreshToken)
+  const tokenExpired = refreshToken!.expiredAt < (Date.now() / 1000)
 
   if (!tokenSame || tokenExpired) {
     unauthorized(ErrorMessage.INVALID_REFRESH_TOKEN)
   }
 
-  const user = await findUserByUsername(username)
+  const rows = await findUserByUsername(username)
+  if (rows == null) {
+    badRequest("user not exist")
+  }
+
   const accessToken = createAccessToken({
-    username: user[0].username,
-    roleName: user[0].name,
-    isAdmin: user[0].isAdmin === 1,
+    username: rows!.user_account.username,
+    roleName: rows!.role?.name,
+    isAdmin: rows!.role?.name === "admin",
   }, getAccessTokenMaxAge(), jti)
   const { exp: newExp } = decode(accessToken) as JwtPayload
 

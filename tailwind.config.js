@@ -4,16 +4,17 @@ import themes from "daisyui/src/theming/themes"
 export const plugins = [
   require("daisyui"),
   addDynamicIconSelectors({
-    prefix: "i"
-  })
+    prefix: "i",
+  }),
 ]
+
 export const daisyui = {
   themes: [
     {
       light: {
-        ...themes.dark
-      }
+        ...themes.dark,
+      },
     },
-    "dark"
-  ]
+    "dark",
+  ],
 }

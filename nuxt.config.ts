@@ -5,18 +5,18 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@sidebase/nuxt-auth",
     "@nuxtjs/tailwindcss",
-    "nuxt-headlessui",
     "@pinia/nuxt",
     "@nuxtjs/color-mode",
     "@nuxt/image",
     "@nuxt/eslint",
+    // "radix-vue/nuxt",
   ],
 
   plugins: [
     "~/plugins/forbidden-handler",
   ],
 
-  ssr: false,
+  ssr: true,
 
   devtools: {
     enabled: true,
@@ -99,11 +99,6 @@ export default defineNuxtConfig({
       routes: ["/"],
       ignore: ["/", "/hi"],
     },
-  },
-
-  typescript: {
-    typeCheck: true,
-    strict: true,
   },
 
   auth: {
